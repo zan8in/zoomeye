@@ -23,11 +23,11 @@ func (z *Zoomeye) Get(apiKey, page string) (result *Result, err error) {
 
 	zoomeyeUrl := fmt.Sprintf(URL, url.QueryEscape("after:'"+GetLastMonthDate(-10)+"'+"+z.Options.Search), page)
 
-	body, statusCode, err := retryhttp.GetWithApiKey(zoomeyeUrl, apiKey)
+	body, _, err := retryhttp.GetWithApiKey(zoomeyeUrl, apiKey)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(zoomeyeUrl, statusCode)
+	// fmt.Println(zoomeyeUrl, statusCode)
 
 	if err = json.Unmarshal(body, &result); err != nil {
 		return nil, err

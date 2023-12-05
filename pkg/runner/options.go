@@ -10,6 +10,7 @@ import (
 type Options struct {
 	Search string
 	Page   int
+	Count  int
 	ApiKey string
 }
 
@@ -22,6 +23,7 @@ func ParseOptions() (*Options, error) {
 	flagSet.CreateGroup("input", "Input",
 		flagSet.StringVarP(&options.Search, "search", "s", "", "query conditions"),
 		flagSet.StringVar(&options.ApiKey, "api", "", "api key"),
+		flagSet.IntVar(&options.Count, "count", DefaultCount, "query count"),
 	)
 
 	_ = flagSet.Parse()

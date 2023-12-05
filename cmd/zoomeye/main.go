@@ -46,7 +46,7 @@ func main() {
 	var urlSlice []string
 	var currentTotal, total int
 	for r := range resultChan {
-		currentTotal += len(r.Results)
+		// currentTotal += len(r.Results)
 		if total == 0 {
 			total = r.Total
 		}
@@ -71,8 +71,12 @@ func main() {
 				url = fmt.Sprintf("%s%s", ip, strPort)
 			}
 			urlSlice = append(urlSlice, url)
+			currentTotal++
+			if currentTotal == options.Count {
+				break
+			}
 		}
-		fmt.Printf("\rZoomEye Searching... Total: %d, Current: %d\n", total, currentTotal)
+		fmt.Printf("\rZoomEye Searching... Total: %d, Count: %d, Current: %d\n", total, options.Count, currentTotal)
 	}
 
 	fmt.Println("-----------------------------")

@@ -104,6 +104,10 @@ func (runner *Runner) RunChan() (chan zoomeye.Result, error) {
 				totalResults = result.Total
 			}
 
+			if runner.Options.Count > 0 && lenResults >= runner.Options.Count {
+				break
+			}
+
 			if lenResults >= totalResults || lenResults == 0 {
 				break
 			}
