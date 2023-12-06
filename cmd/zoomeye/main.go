@@ -83,7 +83,7 @@ func main() {
 		fmt.Printf("\rZoomEye Searching... Total: %d, Count: %d, Current: %d\n", total, options.Count, currentTotal)
 	}
 
-	fmt.Println("")
+	fmt.Println(len(results))
 
 	// if len(results) > 0 {
 	// 	for _, url := range results {

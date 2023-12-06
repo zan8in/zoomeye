@@ -26,6 +26,10 @@ func New(options *Options) (runner *Runner, err error) {
 		CurrentTotal: 0,
 	}
 
+	if len(options.ApiKey) > 0 {
+		config.ValidKeys = append(config.ValidKeys, options.ApiKey)
+	}
+
 	zoomeyeOpt := &zoomeye.Options{
 		Search: options.Search,
 	}
