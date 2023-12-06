@@ -48,34 +48,34 @@ func New(options *Options) (runner *Runner, err error) {
 	return runner, err
 }
 
-func (runner *Runner) Run() (zoomeyeResults []*zoomeye.Result, err error) {
-	key := config.GetApiKey()
-	if len(key) == 0 {
-		return nil, errors.New("api key is expired")
-	}
+// func (runner *Runner) Run() (zoomeyeResults []*zoomeye.Result, err error) {
+// 	key := config.GetApiKey()
+// 	if len(key) == 0 {
+// 		return nil, errors.New("api key is expired")
+// 	}
 
-	var currentPage, lenResults, totalResults int
-	currentPage = 1
-	for {
-		result, err := runner.Query(key, runner.Options.Search, strconv.Itoa(currentPage))
-		if err != nil || result == nil {
-			break
-		}
-		zoomeyeResults = append(zoomeyeResults, result)
+// 	var currentPage, lenResults, totalResults int
+// 	currentPage = 1
+// 	for {
+// 		result, err := runner.Query(key, runner.Options.Search, strconv.Itoa(currentPage))
+// 		if err != nil || result == nil {
+// 			break
+// 		}
+// 		zoomeyeResults = append(zoomeyeResults, result)
 
-		currentPage++
-		lenResults += len(result.Results)
-		totalResults = result.Total
+// 		currentPage++
+// 		lenResults += len(result.Results)
+// 		totalResults = result.Total
 
-		if lenResults > totalResults || lenResults == 0 {
-			break
-		}
+// 		if lenResults > totalResults || lenResults == 0 {
+// 			break
+// 		}
 
-		randutil.RandSleep(zoomeye.DefaultSleepTime)
-	}
+// 		randutil.RandSleep(zoomeye.DefaultSleepTime)
+// 	}
 
-	return zoomeyeResults, err
-}
+// 	return zoomeyeResults, err
+// }
 
 func (runner *Runner) RunChan() (chan zoomeye.Result, error) {
 	key := config.GetApiKey()
@@ -96,12 +96,18 @@ func (runner *Runner) RunChan() (chan zoomeye.Result, error) {
 				break
 			}
 
+			// fmt.Println(len(result.Results), result.Total, currentPage, lenResults, totalResults)
+
 			results <- *result
 
 			currentPage++
 			lenResults += len(result.Results)
 			if totalResults == 0 {
 				totalResults = result.Total
+			}
+
+			if len(result.Results) == 0 || result.Total == 0 {
+				break
 			}
 
 			if runner.Options.Count > 0 && lenResults >= runner.Options.Count {

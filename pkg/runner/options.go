@@ -12,6 +12,7 @@ type Options struct {
 	Page   int
 	Count  int
 	ApiKey string
+	After  string
 }
 
 func ParseOptions() (*Options, error) {

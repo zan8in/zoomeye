@@ -43,34 +43,38 @@ func main() {
 		gologger.Fatal().Msg(err.Error())
 	}
 
-	var urlSlice []string
+	var results []string
 	var currentTotal, total int
 	for r := range resultChan {
-		// currentTotal += len(r.Results)
 		if total == 0 {
 			total = r.Total
 		}
 		for _, v := range r.Results {
-			var ip, service string
-			var port float64
+			var ip, port, service string
 			ip = v["ip"].(string)
 			portinfo := v["portinfo"].(map[string]any)
 			if portinfo != nil {
-				port = portinfo["port"].(float64)
+				switch portinfo["port"].(type) {
+				case float64:
+					port = fmt.Sprintf("%f", portinfo["port"].(float64))
+				case string:
+					port = portinfo["port"].(string)
+				default:
+					port = fmt.Sprintf("%v", portinfo["port"])
+				}
 				service = portinfo["service"].(string)
 			}
 
 			url := ""
-			strPort := ""
-			if int(port) != 0 {
-				strPort = fmt.Sprintf(":%d", int(port))
+			if len(port) != 0 {
+				port = fmt.Sprintf(":%s", port)
 			}
 			if service == "http" || service == "https" {
-				url = fmt.Sprintf("%s://%s%s", service, ip, strPort)
+				url = fmt.Sprintf("%s://%s%s", service, ip, port)
 			} else {
-				url = fmt.Sprintf("%s%s", ip, strPort)
+				url = fmt.Sprintf("%s%s", ip, port)
 			}
-			urlSlice = append(urlSlice, url)
+			results = append(results, url)
 			currentTotal++
 			if currentTotal == options.Count {
 				break
@@ -79,11 +83,11 @@ func main() {
 		fmt.Printf("\rZoomEye Searching... Total: %d, Count: %d, Current: %d\n", total, options.Count, currentTotal)
 	}
 
-	fmt.Println("-----------------------------")
+	fmt.Println("")
 
-	if len(urlSlice) > 0 {
-		for _, url := range urlSlice {
-			fmt.Println(url)
-		}
-	}
+	// if len(results) > 0 {
+	// 	for _, url := range results {
+	// 		fmt.Println(url)
+	// 	}
+	// }
 }
