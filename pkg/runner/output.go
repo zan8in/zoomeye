@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/zan8in/gologger"
-	"github.com/zan8in/hunter/pkg/result"
 	fileutil "github.com/zan8in/pins/file"
+	"github.com/zan8in/zoomeye/pkg/result"
 )
 
 type FileType = uint8
